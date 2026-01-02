@@ -8,6 +8,7 @@ using namespace std;
 int N, E;
 int cnt = 0;
 int arr[MAX][MAX]={{0,}};
+int idx[MAX];
 bool visited[MAX] = {false, };
 
 void input(void)
@@ -18,8 +19,8 @@ void input(void)
   {
     int n1, n2;
     cin >> n1 >> n2;
-    arr[n1][n2] = 1;
-    arr[n2][n1] = 1;
+    arr[n1][idx[n1]++] = n2;
+    arr[n2][idx[n2]++] = n1;
   }
 }
 
@@ -38,11 +39,12 @@ void printArr(void)
 void DFS(int node)
 {
   visited[node] = true;
-  for(int i=1; i<=N; ++i)
+  for(int i=0; i<idx[node]; ++i)
   {
-    if(arr[node][i]==0 || visited[i] == true) continue;
+    int next_node = arr[node][i];
+    if(visited[next_node]==true) continue;
     cnt++;
-    DFS(i);
+    DFS(next_node);
   }
 }
 
