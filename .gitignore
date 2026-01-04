@@ -1,0 +1,16 @@
+# Binaries
+*.out
+*.exe
+*.o
+cpp/boj*
+!cpp/boj*.cpp
+cpp/lcd*
+!cpp/lcd*.cpp
+
+# Input/Output
+input.txt
+output
+
+# OS/IDE
+.DS_Store
+.vscode/
