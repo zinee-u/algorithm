@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 
 
-PROBLEMS = ("01-square-regions", "02-ticket-exchange")
+PROBLEMS = ("01-square-regions", "02-ticket-exchange", "03-sticker-exchange")
 
 
 def _case(case_id, name, args, expected):
@@ -201,12 +201,81 @@ def _ticket_cases():
     ]
 
 
+def _sticker_cases():
+    identical_row = [0, 1] * 50000
+    return [
+        _case("01", "이미 같은 스티커 배치", [[[1], [0]], [[1], [0]]], 0),
+        _case(
+            "02", "다른 행의 같은 열 교환",
+            [[[1, 0], [0, 0]], [[0, 0], [1, 0]]],
+            1,
+        ),
+        _case(
+            "03", "같은 행 안에서 스티커 이동",
+            [[[1, 0, 0], [0, 0, 0]], [[0, 0, 1], [0, 0, 0]]],
+            2,
+        ),
+        _case(
+            "04", "같은 행의 여러 스티커 이동",
+            [[[1, 1, 0, 0], [0, 0, 0, 0]], [[0, 0, 1, 1], [0, 0, 0, 0]]],
+            4,
+        ),
+        _case(
+            "05", "다른 행의 서로 다른 열 교환",
+            [
+                [[1, 1, 1, 0, 0], [0, 0, 0, 0, 0]],
+                [[0, 0, 0, 0, 0], [1, 0, 1, 0, 1]],
+            ],
+            3,
+        ),
+        _case(
+            "06", "세 행에 걸친 스티커 교환",
+            [
+                [[1, 1, 1, 1], [1, 1, 0, 0], [0, 0, 0, 0]],
+                [[0, 0, 0, 0], [0, 0, 1, 1], [1, 1, 1, 1]],
+            ],
+            6,
+        ),
+        _case(
+            "07", "한 행의 최대 길이 일치 배치",
+            [[identical_row[:]], [identical_row[:]]],
+            0,
+        ),
+        _case(
+            "08", "한 열의 최대 행 수 교환",
+            [
+                [[1] for _ in range(50000)] + [[0] for _ in range(50000)],
+                [[0] for _ in range(50000)] + [[1] for _ in range(50000)],
+            ],
+            50000,
+        ),
+        _case(
+            "09", "최대 크기에서 한 행 내부 재배치",
+            [
+                [[1] * 25000 + [0] * 25000, [0] * 50000],
+                [[0] * 25000 + [1] * 25000, [0] * 50000],
+            ],
+            50000,
+        ),
+        _case(
+            "10", "행 사이 교환과 행 내부 재배치 혼합",
+            [
+                [[1, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+                [[0, 0, 1, 0], [0, 0, 0, 1], [0, 0, 0, 0]],
+            ],
+            3,
+        ),
+    ]
+
+
 def make_cases(problem):
     """문항 ID에 해당하는 테스트 열 개를 새 목록으로 반환한다."""
     if problem == "01-square-regions":
         return _square_cases()
     if problem == "02-ticket-exchange":
         return _ticket_cases()
+    if problem == "03-sticker-exchange":
+        return _sticker_cases()
     raise ValueError("지원하지 않는 문항 ID: " + str(problem))
 
 

@@ -16,7 +16,7 @@ import time
 
 
 sys.dont_write_bytecode = True
-PROBLEMS = ("01-square-regions", "02-ticket-exchange")
+PROBLEMS = ("01-square-regions", "02-ticket-exchange", "03-sticker-exchange")
 COMPILE_TIMEOUT = 60
 PYTHON_WORKER = r'''
 import importlib.util
@@ -37,7 +37,7 @@ if not callable(function):
 with open(input_path, encoding="utf-8") as stream:
     arguments = json.load(stream)["args"]
 value = function(*arguments)
-expected_type = int if problem == "01-square-regions" else str
+expected_type = str if problem == "02-ticket-exchange" else int
 if type(value) is not expected_type:
     raise TypeError(
         f"solution 반환 형식은 {expected_type.__name__}이어야 합니다. "
@@ -69,7 +69,7 @@ def load_cases(problem):
         cases = list(module.make_cases(problem))
         if len(cases) != 10:
             raise ValueError(f"공개 테스트는 10개여야 합니다. 실제: {len(cases)}개")
-        expected_type = int if problem == PROBLEMS[0] else str
+        expected_type = str if problem == PROBLEMS[1] else int
         for case in cases:
             if not {"id", "name", "args", "expected"}.issubset(case):
                 raise ValueError("테스트에 id/name/args/expected 필드가 필요합니다.")
@@ -130,7 +130,7 @@ int main() {
     int (*submitted_solution)(vector<vector<int>>) = &solution;
     cout << submitted_solution(std::move(board));
 '''
-    else:
+    elif problem == PROBLEMS[1]:
         body = '''    int p, r;
     if (!(cin >> p >> r)) return 2;
     vector<string> preferences(p);
@@ -142,6 +142,20 @@ int main() {
             if (!(cin >> field)) return 2;
     string (*submitted_solution)(vector<string>, vector<vector<string>>) = &solution;
     cout << submitted_solution(std::move(preferences), std::move(requests));
+'''
+    else:
+        body = '''    int n, m;
+    if (!(cin >> n >> m)) return 2;
+    vector<vector<int>> sticker(n, vector<int>(m));
+    vector<vector<int>> target(n, vector<int>(m));
+    for (auto& row : sticker)
+        for (int& value : row)
+            if (!(cin >> value)) return 2;
+    for (auto& row : target)
+        for (int& value : row)
+            if (!(cin >> value)) return 2;
+    int (*submitted_solution)(vector<vector<int>>, vector<vector<int>>) = &solution;
+    cout << submitted_solution(std::move(sticker), std::move(target));
 '''
     return prefix + body + "    return 0;\n}\n"
 
@@ -193,12 +207,18 @@ def write_cpp_input(problem, arguments, path):
             stream.write(f"{len(board)} {len(board[0])}\n")
             for row in board:
                 stream.write(" ".join(map(str, row)) + "\n")
-        else:
+        elif problem == PROBLEMS[1]:
             preferences, requests = arguments
             stream.write(f"{len(preferences)} {len(requests)}\n")
             stream.write("\n".join(preferences) + "\n")
             for request in requests:
                 stream.write(" ".join(request) + "\n")
+        else:
+            sticker, target = arguments
+            stream.write(f"{len(sticker)} {len(sticker[0])}\n")
+            for board in (sticker, target):
+                for row in board:
+                    stream.write(" ".join(map(str, row)) + "\n")
 
 
 def run_case(problem, source, executable, case, directory, timeout):
