@@ -16,7 +16,7 @@ import time
 
 
 sys.dont_write_bytecode = True
-PROBLEMS = ("01-square-regions", "02-ticket-exchange", "03-sticker-exchange")
+PROBLEMS = ("01-square-regions", "02-ticket-exchange", "03-sticker-exchange", "04-number-movement")
 COMPILE_TIMEOUT = 60
 PYTHON_WORKER = r'''
 import importlib.util
@@ -37,12 +37,14 @@ if not callable(function):
 with open(input_path, encoding="utf-8") as stream:
     arguments = json.load(stream)["args"]
 value = function(*arguments)
-expected_type = str if problem == "02-ticket-exchange" else int
+expected_type = list if problem == "04-number-movement" else (str if problem == "02-ticket-exchange" else int)
 if type(value) is not expected_type:
     raise TypeError(
         f"solution 반환 형식은 {expected_type.__name__}이어야 합니다. "
         f"실제: {type(value).__name__}"
     )
+if expected_type is list and (len(value) != 2 or any(type(count) is not int for count in value)):
+    raise TypeError("solution 반환값은 정수 두 개를 담은 list여야 합니다: [왼쪽, 오른쪽]")
 with open(result_path, "w", encoding="utf-8") as stream:
     json.dump({"value": value}, stream, ensure_ascii=False)
 '''
@@ -69,7 +71,7 @@ def load_cases(problem):
         cases = list(module.make_cases(problem))
         if len(cases) != 10:
             raise ValueError(f"공개 테스트는 10개여야 합니다. 실제: {len(cases)}개")
-        expected_type = str if problem == PROBLEMS[1] else int
+        expected_type = list if problem == PROBLEMS[3] else (str if problem == PROBLEMS[1] else int)
         for case in cases:
             if not {"id", "name", "args", "expected"}.issubset(case):
                 raise ValueError("테스트에 id/name/args/expected 필드가 필요합니다.")
@@ -77,6 +79,11 @@ def load_cases(problem):
                 raise ValueError("테스트 args는 배열이어야 합니다.")
             if type(case["expected"]) is not expected_type:
                 raise ValueError("테스트 기대값의 형식이 문제와 맞지 않습니다.")
+            if expected_type is list and (
+                len(case["expected"]) != 2
+                or any(type(count) is not int for count in case["expected"])
+            ):
+                raise ValueError("테스트 기대값은 정수 두 개를 담은 배열이어야 합니다.")
         return cases
     except Exception as error:
         raise EnvironmentErrorForChecker(f"cases.py를 불러올 수 없습니다: {error}") from error
@@ -143,7 +150,7 @@ int main() {
     string (*submitted_solution)(vector<string>, vector<vector<string>>) = &solution;
     cout << submitted_solution(std::move(preferences), std::move(requests));
 '''
-    else:
+    elif problem == PROBLEMS[2]:
         body = '''    int n, m;
     if (!(cin >> n >> m)) return 2;
     vector<vector<int>> sticker(n, vector<int>(m));
@@ -156,6 +163,20 @@ int main() {
             if (!(cin >> value)) return 2;
     int (*submitted_solution)(vector<vector<int>>, vector<vector<int>>) = &solution;
     cout << submitted_solution(std::move(sticker), std::move(target));
+'''
+    else:
+        body = '''    int n;
+    if (!(cin >> n)) return 2;
+    vector<int> numbers(n);
+    for (int& value : numbers)
+        if (!(cin >> value)) return 2;
+    vector<int> (*submitted_solution)(vector<int>) = &solution;
+    vector<int> result = submitted_solution(std::move(numbers));
+    if (result.size() != 2) {
+        cerr << "solution must return vector<int> of length 2";
+        return 2;
+    }
+    cout << '[' << result[0] << ", " << result[1] << ']';
 '''
     return prefix + body + "    return 0;\n}\n"
 
@@ -213,12 +234,16 @@ def write_cpp_input(problem, arguments, path):
             stream.write("\n".join(preferences) + "\n")
             for request in requests:
                 stream.write(" ".join(request) + "\n")
-        else:
+        elif problem == PROBLEMS[2]:
             sticker, target = arguments
             stream.write(f"{len(sticker)} {len(sticker[0])}\n")
             for board in (sticker, target):
                 for row in board:
                     stream.write(" ".join(map(str, row)) + "\n")
+        else:
+            numbers = arguments[0]
+            stream.write(f"{len(numbers)}\n")
+            stream.write(" ".join(map(str, numbers)) + "\n")
 
 
 def run_case(problem, source, executable, case, directory, timeout):

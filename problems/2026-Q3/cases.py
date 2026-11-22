@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 
 
-PROBLEMS = ("01-square-regions", "02-ticket-exchange", "03-sticker-exchange")
+PROBLEMS = ("01-square-regions", "02-ticket-exchange", "03-sticker-exchange", "04-number-movement")
 
 
 def _case(case_id, name, args, expected):
@@ -268,6 +268,21 @@ def _sticker_cases():
     ]
 
 
+def _movement_cases():
+    return [
+        _case("01", "빈 칸 하나", [[0]], [0, 0]),
+        _case("02", "인접한 숫자는 엇갈려 통과", [[1, -1]], [1, 1]),
+        _case("03", "같은 칸에서 합이 영이면 소멸", [[3, 0, -3]], [0, 0]),
+        _case("04", "양수로 합쳐진 숫자는 하나로 계산", [[5, 0, -3]], [0, 1]),
+        _case("05", "음수로 합쳐진 숫자는 왼쪽으로 이동", [[2, 0, -5]], [1, 0]),
+        _case("06", "합쳐진 숫자의 방향 전환과 연속 충돌", [[4, 0, 3, 0, -5]], [0, 1]),
+        _case("07", "양쪽 탈출과 영으로 소멸이 동시 발생", [[-1, 0, 3, 0, -3, 0, 1]], [1, 1]),
+        _case("08", "최대 길이에서 모두 오른쪽으로 탈출", [[10**9] * 100000], [0, 100000]),
+        _case("09", "최대 길이에서 양수와 음수가 번갈아 통과", [[10**9, -(10**9)] * 50000], [50000, 50000]),
+        _case("10", "최대 길이에서 마주 오는 두 묶음 소멸", [[10**9] * 50000 + [-(10**9)] * 50000], [0, 0]),
+    ]
+
+
 def make_cases(problem):
     """문항 ID에 해당하는 테스트 열 개를 새 목록으로 반환한다."""
     if problem == "01-square-regions":
@@ -276,6 +291,8 @@ def make_cases(problem):
         return _ticket_cases()
     if problem == "03-sticker-exchange":
         return _sticker_cases()
+    if problem == "04-number-movement":
+        return _movement_cases()
     raise ValueError("지원하지 않는 문항 ID: " + str(problem))
 
 

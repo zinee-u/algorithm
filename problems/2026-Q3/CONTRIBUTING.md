@@ -1,6 +1,6 @@
 # 풀이 제출하기
 
-이 폴더의 세 연습 문제는 공개 테스트를 직접 실행한 뒤 Pull Request로 풀이를 제출할 수 있습니다. 공개 테스트는 문항별 10개이며, 작은 경계 입력과 제한 크기의 입력을 포함합니다. 문항 3의 최대 크기는 원래 시험에서 확인한 제한이 아닌 연습용 상한입니다. 모두 통과해도 모든 입력에 대한 정답이나 특정 시간 복잡도가 보장되지는 않으므로, 알고리즘의 타당성과 복잡도도 확인해 주세요.
+이 폴더의 네 연습 문제는 공개 테스트를 직접 실행한 뒤 Pull Request로 풀이를 제출할 수 있습니다. 공개 테스트는 문항별 10개이며, 작은 경계 입력과 제한 크기의 입력을 포함합니다. 문항 3과 문항 4의 최대 크기는 원래 시험에서 확인한 제한이 아닌 연습용 상한입니다. 모두 통과해도 모든 입력에 대한 정답이나 특정 시간 복잡도가 보장되지는 않으므로, 알고리즘의 타당성과 복잡도도 확인해 주세요.
 
 ## 1. Fork와 작업 브랜치
 
@@ -21,10 +21,12 @@ problems/2026-Q3/submissions/<github-id>/
 ├── 02-ticket-exchange.py
 ├── 02-ticket-exchange.cpp
 ├── 03-sticker-exchange.py
-└── 03-sticker-exchange.cpp
+├── 03-sticker-exchange.cpp
+├── 04-number-movement.py
+└── 04-number-movement.cpp
 ```
 
-문항 1은 **[완성된 정사각형 타일 묶음](01-square-regions/problem.md)**, 문항 2는 **[가장 마음에 드는 체험 부스](02-ticket-exchange/problem.md)**, 문항 3은 **[스티커 교환](03-sticker-exchange/problem.md)**입니다. 각 `problem.md`의 공개 규칙을 기준으로 구현합니다. 필요하면 같은 폴더에 접근 방법과 시간·공간 복잡도를 설명한 `README.md`를 추가하세요.
+문항 1은 **[완성된 정사각형 타일 묶음](01-square-regions/problem.md)**, 문항 2는 **[가장 마음에 드는 체험 부스](02-ticket-exchange/problem.md)**, 문항 3은 **[스티커 교환](03-sticker-exchange/problem.md)**, 문항 4는 **[숫자의 이동과 합치지](04-number-movement/problem.md)**입니다. 각 `problem.md`의 공개 규칙을 기준으로 구현합니다. 필요하면 같은 폴더에 접근 방법과 시간·공간 복잡도를 설명한 `README.md`를 추가하세요.
 
 Python은 `solution` 함수를 정의하고 값을 반환합니다. 입력을 직접 읽거나 실행 코드를 추가할 필요는 없습니다.
 
@@ -39,6 +41,10 @@ def solution(preferences, requests):
 
 # 03-sticker-exchange.py: int 반환
 def solution(sticker, target):
+    ...
+
+# 04-number-movement.py: [왼쪽 개수, 오른쪽 개수]인 list[int] 반환
+def solution(numbers):
     ...
 ```
 
@@ -57,6 +63,9 @@ string solution(vector<string> preferences, vector<vector<string>> requests);
 
 // 03-sticker-exchange.cpp
 int solution(vector<vector<int>> sticker, vector<vector<int>> target);
+
+// 04-number-movement.cpp: {왼쪽 개수, 오른쪽 개수} 반환
+vector<int> solution(vector<int> numbers);
 ```
 
 각 `.cpp`에는 해당 문항의 함수 정의를 포함해야 합니다. 외부 라이브러리나 다른 파일 없이 하나의 풀이 파일로 실행 가능하게 작성하세요. 반환값을 화면에 출력하지 마세요. 특히 C++의 `cout`/`printf` 디버깅 출력은 오답으로 처리됩니다. Python의 일반적인 디버깅 출력은 반환값 판정에 섞이지 않지만 제출 전 제거하는 것을 권장합니다.
@@ -71,6 +80,7 @@ Python 3와 표준 라이브러리만으로 채점기를 실행할 수 있습니
 python3 problems/2026-Q3/check.py 01-square-regions problems/2026-Q3/submissions/<github-id>/01-square-regions.py --timeout 5
 python3 problems/2026-Q3/check.py 02-ticket-exchange problems/2026-Q3/submissions/<github-id>/02-ticket-exchange.cpp --timeout 5
 python3 problems/2026-Q3/check.py 03-sticker-exchange problems/2026-Q3/submissions/<github-id>/03-sticker-exchange.py --timeout 5
+python3 problems/2026-Q3/check.py 04-number-movement problems/2026-Q3/submissions/<github-id>/04-number-movement.py --timeout 10
 ```
 
 문제 폴더 안에서는 더 짧게 실행할 수 있습니다. 풀이 파일의 절대 경로도 지원합니다.
@@ -80,9 +90,12 @@ cd problems/2026-Q3
 python3 check.py 01-square-regions /path/to/solution.py --timeout 5
 python3 check.py 02-ticket-exchange /path/to/solution.cpp --timeout 5
 python3 check.py 03-sticker-exchange /path/to/solution.py --timeout 5
+python3 check.py 04-number-movement /path/to/solution.py --timeout 10
 ```
 
 `--timeout`의 기본값은 테스트당 5초입니다. 테스트마다 새로운 프로세스에서 실행하므로 전역 변수 상태가 다음 테스트로 이어지지 않습니다. 표시되는 시간에는 프로세스 시작, Python 모듈 로딩, 입력 읽기, 함수 실행이 포함됩니다. 테스트 생성과 입력 파일 준비 시간은 포함하지 않습니다. 실행 환경의 성능에 따라 걸리는 시간은 달라질 수 있습니다.
+
+문항 4의 명령에는 사용자가 기억한 시간 제한에 맞춰 `--timeout 10`을 명시했습니다. 기억한 시험 메모리 제한은 2GB이지만, 이 로컬 채점기는 메모리 상한을 강제하지 않습니다. 원래 시험의 공식 실행 환경을 재현하는 도구는 아닙니다.
 
 컴파일러는 `CXX` 환경 변수, `clang++`, `g++` 순서로 선택합니다. 컴파일에는 `-std=c++17 -O2 -Wall -Wextra -pedantic`을 적용하며, 컴파일 제한 시간은 60초입니다. 예를 들어 `CXX=g++ python3 check.py ...`로 컴파일러를 지정할 수 있습니다. C++ 컴파일 시간은 개별 테스트 제한 시간과 별개입니다.
 
@@ -96,6 +109,8 @@ python3 check.py 03-sticker-exchange /path/to/solution.py --timeout 5
 | `TIMEOUT` | 해당 테스트의 제한 시간 초과 |
 
 마지막 줄에 상태별 개수를 집계합니다. 모두 통과하면 종료 코드 `0`, 테스트 실패 또는 컴파일 실패는 `1`, 잘못된 명령이나 컴파일러·테스트 파일 등 실행 환경 문제는 `2`를 반환합니다. Python의 `bool`은 문항 1과 문항 3의 `int` 반환값으로 인정하지 않습니다.
+
+문항 4는 정수 두 개를 담은 Python `list` 또는 C++ `vector<int>`를 반환해야 합니다. 반환 순서는 `[왼쪽, 오른쪽]`입니다. Python의 튜플, `bool` 원소, 길이가 2가 아닌 목록은 반환 형식 오류입니다.
 
 공개 테스트는 `cases.py`에서 재현 가능하게 생성합니다. 테스트와 채점기를 바꾸어서 본인 풀이를 통과시키지 마세요. 이 도구는 신뢰하는 로컬 풀이를 실행하기 위한 도구이며 보안 샌드박스가 아닙니다.
 

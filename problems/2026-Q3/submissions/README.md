@@ -11,6 +11,8 @@ submissions/
     02-ticket-exchange.cpp
     03-sticker-exchange.py
     03-sticker-exchange.cpp
+    04-number-movement.py
+    04-number-movement.cpp
 ```
 
 풀고 싶은 문제와 언어만 제출해도 됩니다. 각 소스는 `solution` 함수를 정의하며 실행용 `main`이나 입력 처리는 필요하지 않습니다. 풀이 설명을 덧붙이려면 같은 디렉터리에 Markdown 파일을 추가하세요.
