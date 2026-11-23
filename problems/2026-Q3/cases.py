@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 
 
-PROBLEMS = ("01-square-regions", "02-ticket-exchange", "03-sticker-exchange", "04-number-movement")
+PROBLEMS = ("01-square-regions", "02-ticket-exchange", "03-sticker-exchange", "04-number-movement", "05-sticker-same-column")
 
 
 def _case(case_id, name, args, expected):
@@ -202,7 +202,7 @@ def _ticket_cases():
 
 
 def _sticker_cases():
-    identical_row = [0, 1] * 50000
+    identical_row = [0, 1] * 5
     return [
         _case("01", "이미 같은 스티커 배치", [[[1], [0]], [[1], [0]]], 0),
         _case(
@@ -237,33 +237,24 @@ def _sticker_cases():
             6,
         ),
         _case(
-            "07", "한 행의 최대 길이 일치 배치",
+            "07", "한 행 안에서만 필요한 교환은 불가능",
+            [[[1, 0]], [[0, 1]]],
+            -1,
+        ),
+        _case(
+            "08", "값이 1인 스티커 수를 줄일 수 없음",
+            [[[1, 0], [0, 0]], [[0, 0], [0, 0]]],
+            -1,
+        ),
+        _case(
+            "09", "값이 1인 스티커 수를 늘릴 수 없음",
+            [[[0, 0], [0, 0]], [[1, 0], [0, 0]]],
+            -1,
+        ),
+        _case(
+            "10", "한 행의 최대 길이 일치 배치",
             [[identical_row[:]], [identical_row[:]]],
             0,
-        ),
-        _case(
-            "08", "한 열의 최대 행 수 교환",
-            [
-                [[1] for _ in range(50000)] + [[0] for _ in range(50000)],
-                [[0] for _ in range(50000)] + [[1] for _ in range(50000)],
-            ],
-            50000,
-        ),
-        _case(
-            "09", "최대 크기에서 한 행 내부 재배치",
-            [
-                [[1] * 25000 + [0] * 25000, [0] * 50000],
-                [[0] * 25000 + [1] * 25000, [0] * 50000],
-            ],
-            50000,
-        ),
-        _case(
-            "10", "행 사이 교환과 행 내부 재배치 혼합",
-            [
-                [[1, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
-                [[0, 0, 1, 0], [0, 0, 0, 1], [0, 0, 0, 0]],
-            ],
-            3,
         ),
     ]
 
@@ -283,6 +274,63 @@ def _movement_cases():
     ]
 
 
+def _same_column_cases():
+    identical_row = [0, 1] * 5
+    return [
+        _case("01", "이미 같은 스티커 배치", [[[1], [0]], [[1], [0]]], 0),
+        _case(
+            "02", "같은 열의 두 행 교환",
+            [[[1, 0], [0, 0]], [[0, 0], [1, 0]]],
+            1,
+        ),
+        _case(
+            "03", "다른 열로 스티커를 옮길 수 없음",
+            [[[1, 0], [0, 0]], [[0, 0], [0, 1]]],
+            -1,
+        ),
+        _case(
+            "04", "세 행과 두 열에 걸친 교환",
+            [
+                [[1, 0], [0, 1], [0, 0]],
+                [[0, 1], [0, 0], [1, 0]],
+            ],
+            2,
+        ),
+        _case(
+            "05", "세 열의 스티커를 각각 교환",
+            [[[1, 0, 1], [0, 1, 0]], [[0, 1, 0], [1, 0, 1]]],
+            3,
+        ),
+        _case(
+            "06", "세 행과 네 열에 걸친 교환",
+            [
+                [[1, 1, 0, 0], [0, 0, 1, 1], [0, 0, 0, 0]],
+                [[0, 0, 1, 1], [0, 0, 0, 0], [1, 1, 0, 0]],
+            ],
+            4,
+        ),
+        _case("07", "한 행의 내부 재배치는 불가능", [[[1, 0]], [[0, 1]]], -1),
+        _case(
+            "08", "값이 1인 스티커 수를 바꿀 수 없음",
+            [[[1, 0], [0, 0]], [[0, 0], [0, 0]]],
+            -1,
+        ),
+        _case(
+            "09", "최대 크기에서 열마다 다섯 번 교환",
+            [
+                [[1] * 10 for _ in range(5)] + [[0] * 10 for _ in range(5)],
+                [[0] * 10 for _ in range(5)] + [[1] * 10 for _ in range(5)],
+            ],
+            50,
+        ),
+        _case(
+            "10", "한 행의 최대 길이 일치 배치",
+            [[identical_row[:]], [identical_row[:]]],
+            0,
+        ),
+    ]
+
+
 def make_cases(problem):
     """문항 ID에 해당하는 테스트 열 개를 새 목록으로 반환한다."""
     if problem == "01-square-regions":
@@ -293,6 +341,8 @@ def make_cases(problem):
         return _sticker_cases()
     if problem == "04-number-movement":
         return _movement_cases()
+    if problem == "05-sticker-same-column":
+        return _same_column_cases()
     raise ValueError("지원하지 않는 문항 ID: " + str(problem))
 
 

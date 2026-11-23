@@ -1,6 +1,6 @@
 # 풀이 제출하기
 
-이 폴더의 네 연습 문제는 공개 테스트를 직접 실행한 뒤 Pull Request로 풀이를 제출할 수 있습니다. 공개 테스트는 문항별 10개이며, 작은 경계 입력과 제한 크기의 입력을 포함합니다. 문항 3과 문항 4의 최대 크기는 원래 시험에서 확인한 제한이 아닌 연습용 상한입니다. 모두 통과해도 모든 입력에 대한 정답이나 특정 시간 복잡도가 보장되지는 않으므로, 알고리즘의 타당성과 복잡도도 확인해 주세요.
+이 폴더의 다섯 연습 문제는 공개 테스트를 직접 실행한 뒤 Pull Request로 풀이를 제출할 수 있습니다. 공개 테스트는 문항별 10개이며, 작은 경계 입력과 제한 크기의 입력을 포함합니다. 문항 3, 4, 5의 최대 크기는 원래 시험에서 확인한 제한이 아닌 연습용 상한입니다. 모두 통과해도 모든 입력에 대한 정답이나 특정 시간 복잡도가 보장되지는 않으므로, 알고리즘의 타당성과 복잡도도 확인해 주세요.
 
 ## 1. Fork와 작업 브랜치
 
@@ -23,10 +23,20 @@ problems/2026-Q3/submissions/<github-id>/
 ├── 03-sticker-exchange.py
 ├── 03-sticker-exchange.cpp
 ├── 04-number-movement.py
-└── 04-number-movement.cpp
+├── 04-number-movement.cpp
+├── 05-sticker-same-column.py
+└── 05-sticker-same-column.cpp
 ```
 
-문항 1은 **[완성된 정사각형 타일 묶음](01-square-regions/problem.md)**, 문항 2는 **[가장 마음에 드는 체험 부스](02-ticket-exchange/problem.md)**, 문항 3은 **[스티커 교환](03-sticker-exchange/problem.md)**, 문항 4는 **[숫자의 이동과 합치지](04-number-movement/problem.md)**입니다. 각 `problem.md`의 공개 규칙을 기준으로 구현합니다. 필요하면 같은 폴더에 접근 방법과 시간·공간 복잡도를 설명한 `README.md`를 추가하세요.
+각 `problem.md`의 공개 규칙을 기준으로 구현합니다.
+
+- 문항 1: [완성된 정사각형 타일 묶음](01-square-regions/problem.md)
+- 문항 2: [가장 마음에 드는 체험 부스](02-ticket-exchange/problem.md)
+- 문항 3: [스티커 교환 (다른 열 허용)](03-sticker-exchange/problem.md)
+- 문항 4: [숫자의 이동과 합치지](04-number-movement/problem.md)
+- 문항 5: [스티커 교환 (같은 열만)](05-sticker-same-column/problem.md)
+
+문항 3과 문항 5는 함수 형식은 같지만 허용하는 교환과 입력 범위가 다릅니다. 두 문항 모두 목표를 만들 수 없으면 `-1`을 반환합니다. 필요하면 제출 폴더에 접근 방법과 시간·공간 복잡도를 설명한 `README.md`를 추가하세요.
 
 Python은 `solution` 함수를 정의하고 값을 반환합니다. 입력을 직접 읽거나 실행 코드를 추가할 필요는 없습니다.
 
@@ -45,6 +55,10 @@ def solution(sticker, target):
 
 # 04-number-movement.py: [왼쪽 개수, 오른쪽 개수]인 list[int] 반환
 def solution(numbers):
+    ...
+
+# 05-sticker-same-column.py: int 반환
+def solution(sticker, target):
     ...
 ```
 
@@ -66,6 +80,9 @@ int solution(vector<vector<int>> sticker, vector<vector<int>> target);
 
 // 04-number-movement.cpp: {왼쪽 개수, 오른쪽 개수} 반환
 vector<int> solution(vector<int> numbers);
+
+// 05-sticker-same-column.cpp
+int solution(vector<vector<int>> sticker, vector<vector<int>> target);
 ```
 
 각 `.cpp`에는 해당 문항의 함수 정의를 포함해야 합니다. 외부 라이브러리나 다른 파일 없이 하나의 풀이 파일로 실행 가능하게 작성하세요. 반환값을 화면에 출력하지 마세요. 특히 C++의 `cout`/`printf` 디버깅 출력은 오답으로 처리됩니다. Python의 일반적인 디버깅 출력은 반환값 판정에 섞이지 않지만 제출 전 제거하는 것을 권장합니다.
@@ -81,6 +98,7 @@ python3 problems/2026-Q3/check.py 01-square-regions problems/2026-Q3/submissions
 python3 problems/2026-Q3/check.py 02-ticket-exchange problems/2026-Q3/submissions/<github-id>/02-ticket-exchange.cpp --timeout 5
 python3 problems/2026-Q3/check.py 03-sticker-exchange problems/2026-Q3/submissions/<github-id>/03-sticker-exchange.py --timeout 5
 python3 problems/2026-Q3/check.py 04-number-movement problems/2026-Q3/submissions/<github-id>/04-number-movement.py --timeout 10
+python3 problems/2026-Q3/check.py 05-sticker-same-column problems/2026-Q3/submissions/<github-id>/05-sticker-same-column.py --timeout 5
 ```
 
 문제 폴더 안에서는 더 짧게 실행할 수 있습니다. 풀이 파일의 절대 경로도 지원합니다.
@@ -91,6 +109,7 @@ python3 check.py 01-square-regions /path/to/solution.py --timeout 5
 python3 check.py 02-ticket-exchange /path/to/solution.cpp --timeout 5
 python3 check.py 03-sticker-exchange /path/to/solution.py --timeout 5
 python3 check.py 04-number-movement /path/to/solution.py --timeout 10
+python3 check.py 05-sticker-same-column /path/to/solution.py --timeout 5
 ```
 
 `--timeout`의 기본값은 테스트당 5초입니다. 테스트마다 새로운 프로세스에서 실행하므로 전역 변수 상태가 다음 테스트로 이어지지 않습니다. 표시되는 시간에는 프로세스 시작, Python 모듈 로딩, 입력 읽기, 함수 실행이 포함됩니다. 테스트 생성과 입력 파일 준비 시간은 포함하지 않습니다. 실행 환경의 성능에 따라 걸리는 시간은 달라질 수 있습니다.
@@ -108,7 +127,7 @@ python3 check.py 04-number-movement /path/to/solution.py --timeout 10
 | `ERROR` | 예외, 비정상 종료, 잘못된 반환 형식 또는 결과 누락 |
 | `TIMEOUT` | 해당 테스트의 제한 시간 초과 |
 
-마지막 줄에 상태별 개수를 집계합니다. 모두 통과하면 종료 코드 `0`, 테스트 실패 또는 컴파일 실패는 `1`, 잘못된 명령이나 컴파일러·테스트 파일 등 실행 환경 문제는 `2`를 반환합니다. Python의 `bool`은 문항 1과 문항 3의 `int` 반환값으로 인정하지 않습니다.
+마지막 줄에 상태별 개수를 집계합니다. 모두 통과하면 종료 코드 `0`, 테스트 실패 또는 컴파일 실패는 `1`, 잘못된 명령이나 컴파일러·테스트 파일 등 실행 환경 문제는 `2`를 반환합니다. Python의 `bool`은 문항 1, 3, 5의 `int` 반환값으로 인정하지 않습니다.
 
 문항 4는 정수 두 개를 담은 Python `list` 또는 C++ `vector<int>`를 반환해야 합니다. 반환 순서는 `[왼쪽, 오른쪽]`입니다. Python의 튜플, `bool` 원소, 길이가 2가 아닌 목록은 반환 형식 오류입니다.
 

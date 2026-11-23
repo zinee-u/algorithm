@@ -16,7 +16,7 @@ import time
 
 
 sys.dont_write_bytecode = True
-PROBLEMS = ("01-square-regions", "02-ticket-exchange", "03-sticker-exchange", "04-number-movement")
+PROBLEMS = ("01-square-regions", "02-ticket-exchange", "03-sticker-exchange", "04-number-movement", "05-sticker-same-column")
 COMPILE_TIMEOUT = 60
 PYTHON_WORKER = r'''
 import importlib.util
@@ -150,7 +150,7 @@ int main() {
     string (*submitted_solution)(vector<string>, vector<vector<string>>) = &solution;
     cout << submitted_solution(std::move(preferences), std::move(requests));
 '''
-    elif problem == PROBLEMS[2]:
+    elif problem in (PROBLEMS[2], PROBLEMS[4]):
         body = '''    int n, m;
     if (!(cin >> n >> m)) return 2;
     vector<vector<int>> sticker(n, vector<int>(m));
@@ -234,7 +234,7 @@ def write_cpp_input(problem, arguments, path):
             stream.write("\n".join(preferences) + "\n")
             for request in requests:
                 stream.write(" ".join(request) + "\n")
-        elif problem == PROBLEMS[2]:
+        elif problem in (PROBLEMS[2], PROBLEMS[4]):
             sticker, target = arguments
             stream.write(f"{len(sticker)} {len(sticker[0])}\n")
             for board in (sticker, target):
